@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block energyprofile_active %} class="active" {% endblock %}
+
+{% block content %}
+
+
+<h1 class="page-header">Energy Profiles</h1>
+
+<form class="commands" action="/set_profile" method="post">
+  <span>Select Profile:</span>
+  <div class="btn-group" role="group">
+      <input type="submit" class="btn btn-default" value="Economy"/>
+      <input type="submit" class="btn btn-primary" value="Comfort"/>
+  </div>
+</form>
+<br/>
+<form class="commands" action="/set_price" method="post">
+  <span>Select Price:</span>
+  <div class="btn-group" role="group" aria-label="...">
+      <input type="submit" class="btn btn-primary" value="Low" />
+      <input type="submit" class="btn btn-default" value="Medium"/>
+      <input type="submit" class="btn btn-default" value="High" />
+  </div>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Low</th>
+      <th>Medium</th>
+      <th>High</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Lamp</th>
+      <td>On</td>
+      <td>On</td>
+      <td>On</td>
+    </tr>
+    <tr>
+      <th scope="row">Fan</th>
+      <td>Fast</td>
+      <td>Medium</td>
+      <td>Off</td>
+    </tr>
+    <tr>
+      <th scope="row">Pump</th>
+      <td>Fast</td>
+      <td>Slow</td>
+      <td>Off</td>
+    </tr>
+    <tr>
+      <th scope="row">Battery</th>
+      <td>Charging</td>
+      <td>Not Charging</td>
+      <td>Not Charging</td>
+    </tr>
+  </tbody>
+</table>
+
+<script src="{{ url_for('static', filename='js/energy_profiles.js') }}"></script>
+
+
+{% endblock %}

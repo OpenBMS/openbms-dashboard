@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+
+{% block overview_active %} class="active" {% endblock %}
+
+{% block content %}
+    <h1 class="page-header">Dashboard</h1>
+    <div id="architecture">
+      <img id="system" src="{{ url_for('static', filename='img/dash2.png') }}" alt=""/>
+      <!-- <div id="battery-lamp" class="info-panel lamp"></div> -->
+      <!-- <div id="battery-lamp-plug" data-toggle="popover" data-placement="top" data-content="WUT"   class="info-panel plug">
+        {% if systemData['battery-lamp-plug'] %}
+        <div class="popover fade top in" role="tooltip">
+          <div class="arrow" style="left: 50%;"></div>
+          <h3 class="popover-title">battery-lamp-plug</h3>
+          <div class="popover-content">
+            {% for key in systemData['battery-lamp-plug'] %}
+              {{ key|capitalize }} : {{ systemData['battery-lamp-plug'][key] }}
+              </br>
+            {% endfor %}
+          </div>
+          <div class="popover-controls">
+            State:
+            <div class="btn-group" role="group" aria-label="...">
+              <button type="button" class="btn btn-default">On</button>
+              <button type="button" class="btn btn-default">Off</button>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <div id="battery-arduino" class="info-panel arduino"></div>
+      <div id="battery-plug" class="info-panel plug"></div>
+      <div id="lamp-plug" class="info-panel plug">
+      </div>
+      <div id="fan-plug" class="info-panel plug"></div>
+      <div id="fan-arduino" class="info-panel arduino"></div>
+      <div id="pump-arduino" class="info-panel arduino"></div> -->
+
+      {% for device in systemData %}
+
+      <div id="{{systemData[device].location}}" class="info-panel {% if 'plug' in systemData[device].location %} plug {% else %} arduino {% endif %}">
+        {% if systemData[device] %}
+        <div class="popover fade top in" role="tooltip">
+          <div class="arrow" style="left: 50%;"></div>
+          <h3 class="popover-title">{{systemData[device].location}}</h3>
+          <div class="popover-content">
+            {% for key in systemData[device] %}
+              {% if key != 'location' %}
+                {{ key|capitalize }} : {{ systemData[device][key] }}
+                </br>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="popover-controls">
+            <form class="commands" action="/device_command" method="post">
+              <input type="hidden" name="device_id" value="{{device}}"/>
+              <!-- <input type="hidden" name="property"/> -->
+              {% if 'plug' in systemData[device].location %}
+              State:
+              <div class="btn-group" data-property="state" role="group" aria-label="...">
+                <input type="submit" name="command_value" class="btn btn-default" value="On"/>
+                <input type="submit" name="command_value" class="btn btn-default" value ="Off"/>
+              </div>
+              {% endif %}
+
+              {% if 'fan-arduino' in systemData[device].location %}
+              Speed:
+              <div class="btn-group" data-property="speed" role="group" style="margin-left: 2px;">
+                <input type="submit" name="command_value" class="btn btn-default" value="Slow"/>
+                <input type="submit" name="command_value" class="btn btn-default" value="Medium"/>
+                <input type="submit" name="command_value" class="btn btn-default" value="Fast"/>
+              </div>
+              {% endif %}
+
+              {% if 'pump-arduino' in systemData[device].location %}
+              Speed:
+              <div class="btn-group" data-property="speed" role="group" style="margin-left: 2px; margin-bottom: 10px;">
+                <input type="submit" name="command_value" class="btn btn-default" value="Slow"/>
+                <input type="submit" name="command_value" class="btn btn-default" value="Medium"/>
+                <input type="submit" name="command_value" class="btn btn-default" value="Fast"/>
+              </div>
+              </br>
+              State:
+              <div class="btn-group" data-property="state" role="group" style="margin-left: 8px;">
+                <input type="submit" name="command_value" class="btn btn-default" value="On"/>
+                <input type="submit" name="command_value" class="btn btn-default" value ="Off"/>
+              </div>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      {% endfor %}
+    </div>
+    {{systemData}}
+  </div>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
