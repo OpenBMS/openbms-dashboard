@@ -12,13 +12,7 @@ DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
-# Raaghav
-# HOME_CONTROLLER_URL = 'http://54.67.51.107:5050'
-# Phani
-# HOME_CONTROLLER_URL = 'http://52.8.189.198:5050'
-# HOME_CONTROLLER_URL = 'http://54.193.107.213:5050'
-# HOME_CONTROLLER_URL = 'http://localhost:8123'
-HOME_CONTROLLER_URL = 'http://openbms.elomar.me:5050'
+HOME_CONTROLLER_URL = 'http://192.168.99.100:5050'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -143,4 +137,4 @@ def logout():
     return redirect(url_for('show_entries'))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
