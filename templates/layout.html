@@ -16,7 +16,7 @@
 
     <script src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-    
+
 
   </head>
 
@@ -40,9 +40,9 @@
             <li><a href="#">Profile</a></li>
             <li><a href="#">Help</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
+          <!-- <form class="navbar-form navbar-right">
             <input class="form-control" placeholder="Search..." type="text">
-          </form>
+          </form> -->
         </div>
       </div>
     </nav>
@@ -54,7 +54,7 @@
             <li {% block overview_active %}{% endblock %}><a href="/dashboard">Overview </a></li>
             <li {% block systemstatus_active %}{% endblock %}><a href="#">System Status</a></li>
             <li {% block energyprofile_active %}{% endblock %}><a href="/energy_profiles">Energy Profiles</a></li>
-            <li {% block analytics_active %}{% endblock %}><a href="/analytics">Analytics</a></li>
+            <li {% block analytics_active %}{% endblock %}><a href="#">Analytics</a></li>
             <li {% block reports_active %}{% endblock %}><a href="#">Reports</a></li>
           </ul>
           <ul class="nav nav-sidebar">
@@ -62,12 +62,33 @@
           </ul>
 
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-          {% block content %}{% endblock %}
-
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="main-content">
+          <h1 class="page-header">{% block title %}{% endblock %}</h1>
+          <div clas="row">
+            <div class="col-sm-12 col-md-12" id="inner-content">
+              {% block content %}{% endblock %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <script>
+      $( ".navbar-brand" ).click(function() {
+        $( ".sidebar" ).slideToggle( "fast" );
+        var main = $("#main-content");
+        var inner = $('#inner-content');
+        if(main.hasClass('expand')){
+          main.addClass("col-sm-offset-3 col-md-offset-2 ");
+          inner.removeClass("col-sm-offset-2 col-md-offset-1");
+          main.removeClass("expand col-sm-offset-2 col-md-offset-1 ");
+        }
+        else{
+          main.addClass("expand col-sm-offset-2 col-md-offset-1 ");
+          main.removeClass("col-sm-offset-3 col-md-offset-2 ");
+          inner.addClass("col-sm-offset-2 col-md-offset-1");
+        }
+      });
+    </script>
 
 </body></html>
