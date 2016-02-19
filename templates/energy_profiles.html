@@ -15,12 +15,30 @@
   </div>
 </form>
 <br/>
-<form class="commands" action="/set_price" method="post">
+<!-- <form class="commands" action="/set_price" method="post">
   <span>Select Price:</span>
   <div class="btn-group" role="group" aria-label="...">
       <input type="submit" class="btn btn-primary" value="Low" />
       <input type="submit" class="btn btn-default" value="Medium"/>
       <input type="submit" class="btn btn-default" value="High" />
+  </div>
+</form> -->
+<h2>Set Price Thresholds:</h2>
+<form class="threshold" action="/set_price" method="post">
+  <div class="input-group">
+    <span>Low:</span>
+    <input type="number" name="value" value="" step="0.01" min="0" max="999.99"/>
+    <input type="hidden" name="threshold" value="low" />
+    <input type="submit" class="btn-sm btn-default" value="Submit" />
+  </div>
+</form>
+
+<form class="threshold" action="/set_price" method="post">
+  <div class="input-group">
+    <span>High:</span>
+    <input type="number" name="value" value="" step="0.01" min="0" max="999.99"/>
+    <input type="hidden" name="threshold" value="high" />
+    <input type="submit" class="btn-sm btn-default" value="Submit" />
   </div>
 </form>
 
