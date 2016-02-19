@@ -214,3 +214,26 @@ body {
 .popover-controls{
   padding: 9px 14px;
 }
+
+.data-panel{
+  width: 31%;
+  position: absolute;
+}
+
+.data-panel .panel{
+  min-width: 148px;
+  display:inline-block;
+}
+
+#thresholds{
+  width: 100%;
+}
+
+#progress-labels {
+  margin-bottom: 0px;
+}
+
+#progress-labels .progress-bar{
+  color: #777777;
+  background-color: #fff;
+}

@@ -4,17 +4,60 @@
 
 {% block content %}
     <h1 class="page-header">Dashboard</h1>
+
     <div id="architecture">
+      <div class="data-panel">
+        <div class="panel panel-default ">
+          <div class="panel-heading">Current Power</div>
+          <div class="panel-body" id="total_power">
+            {{systemData.total_power.magnitude}} {{systemData.total_power.unit | capitalize}}
+          </div>
+        </div>
+
+        <div class="panel panel-default " >
+          <div class="panel-heading">Current Price</div>
+          <div class="panel-body" id="price">
+            {{systemData.price}} ¢/kWh
+          </div>
+        </div>
+        <div class="panel panel-default " >
+          <div class="panel-heading">Grid Status</div>
+          <div class="panel-body" id="status">
+            {% if systemData.disruption %}
+              Loss of Generation
+            {% else %}
+              Normal
+            {% endif %}
+
+          </div>
+        </div>
+        <div class="panel panel-default"  id="thresholds">
+          <div class="panel-body">
+            <div class="progress" id="progress-labels">
+              <div class="progress-bar " style="width: 33%; text-align: right;">{{'%0.1f' % systemData.thresholds.low|float}}</div>
+              <div class="progress-bar progress-bar-warning" style="width: 34%"></div>
+              <div class="progress-bar progress-bar-success" style="width: 33%; text-align: left;">{{'%0.1f' % systemData.thresholds.high|float}}</div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar progress-bar-info" style="width: 33%">Comfort</div>
+              <div class="progress-bar progress-bar-warning" style="width: 34%">Normal</div>
+              <div class="progress-bar progress-bar-success" style="width: 33%">Economy</div>
+            </div>
+
+          </div>
+          <div class="panel-footer">Price Thresholds</div>
+        </div>
+      </div>
       <img id="system" src="{{ url_for('static', filename='img/dash2.png') }}" alt=""/>
       <!-- <div id="battery-lamp" class="info-panel lamp"></div> -->
-      <!-- <div id="battery-lamp-plug" data-toggle="popover" data-placement="top" data-content="WUT"   class="info-panel plug">
-        {% if systemData['battery-lamp-plug'] %}
+      <!-- {#<div id="battery-lamp-plug" data-toggle="popover" data-placement="top" data-content="WUT"   class="info-panel plug">
+        {% if systemData.devices['battery-lamp-plug'] %}
         <div class="popover fade top in" role="tooltip">
           <div class="arrow" style="left: 50%;"></div>
           <h3 class="popover-title">battery-lamp-plug</h3>
           <div class="popover-content">
-            {% for key in systemData['battery-lamp-plug'] %}
-              {{ key|capitalize }} : {{ systemData['battery-lamp-plug'][key] }}
+            {% for key in systemData.devices['battery-lamp-plug'] %}
+              {{ key|capitalize }} : {{ systemData.devices['battery-lamp-plug'][key] }}
               </br>
             {% endfor %}
           </div>
@@ -34,20 +77,25 @@
       </div>
       <div id="fan-plug" class="info-panel plug"></div>
       <div id="fan-arduino" class="info-panel arduino"></div>
-      <div id="pump-arduino" class="info-panel arduino"></div> -->
+      <div id="pump-arduino" class="info-panel arduino"></div>  #}-->
 
-      {% for device in systemData %}
+      {% for device in systemData.entities %}
 
-      <div id="{{systemData[device].location}}" class="info-panel {% if 'plug' in systemData[device].location %} plug {% else %} arduino {% endif %}">
-        {% if systemData[device] %}
+      <div id="{{systemData.entities[device].location}}" class="info-panel {% if 'plug' in systemData.entities[device].location %} plug {% else %} arduino {% endif %}">
+        {% if systemData.entities[device] %}
         <div class="popover fade top in" role="tooltip">
           <div class="arrow" style="left: 50%;"></div>
-          <h3 class="popover-title">{{systemData[device].location}}</h3>
+          <h3 class="popover-title">{{systemData.entities[device].location}}</h3>
           <div class="popover-content">
-            {% for key in systemData[device] %}
-              {% if key != 'location' %}
-                {{ key|capitalize }} : {{ systemData[device][key] }}
-                </br>
+            {% for key in systemData.entities[device] %}
+              {% if key != 'location' and key != 'device_type'%}
+                {% if key == 'power' or key == 'voltage' %}
+                  {{ key|capitalize }} : {{ systemData.entities[device][key].magnitude }} {{ systemData.entities[device][key].unit }}
+                  </br>
+                {% else %}
+                  {{ key|capitalize }} : {{ systemData.entities[device][key] }}
+                  </br>
+                {% endif %}
               {% endif %}
             {% endfor %}
           </div>
@@ -55,15 +103,15 @@
             <form class="commands" action="/device_command" method="post">
               <input type="hidden" name="device_id" value="{{device}}"/>
               <!-- <input type="hidden" name="property"/> -->
-              {% if 'plug' in systemData[device].location %}
+              {% if 'plug' in systemData.entities[device].location %}
               State:
-              <div class="btn-group" data-property="state" role="group" aria-label="...">
+              <div class="btn-group" data-property="switch" role="group" aria-label="...">
                 <input type="submit" name="command_value" class="btn btn-default" value="On"/>
                 <input type="submit" name="command_value" class="btn btn-default" value ="Off"/>
               </div>
               {% endif %}
 
-              {% if 'fan-arduino' in systemData[device].location %}
+              {% if 'fan-arduino' in systemData.entities[device].location %}
               Speed:
               <div class="btn-group" data-property="speed" role="group" style="margin-left: 2px;">
                 <input type="submit" name="command_value" class="btn btn-default" value="Slow"/>
@@ -72,7 +120,7 @@
               </div>
               {% endif %}
 
-              {% if 'pump-arduino' in systemData[device].location %}
+              {% if 'pump-arduino' in systemData.entities[device].location %}
               Speed:
               <div class="btn-group" data-property="speed" role="group" style="margin-left: 2px; margin-bottom: 10px;">
                 <input type="submit" name="command_value" class="btn btn-default" value="Slow"/>
@@ -81,7 +129,7 @@
               </div>
               </br>
               State:
-              <div class="btn-group" data-property="state" role="group" style="margin-left: 8px;">
+              <div class="btn-group" data-property="switch" role="group" style="margin-left: 8px;">
                 <input type="submit" name="command_value" class="btn btn-default" value="On"/>
                 <input type="submit" name="command_value" class="btn btn-default" value ="Off"/>
               </div>
@@ -94,7 +142,7 @@
 
       {% endfor %}
     </div>
-    {{systemData}}
+    <!-- {{systemData}} -->
   </div>
   <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
