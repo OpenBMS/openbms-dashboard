@@ -162,9 +162,5 @@ def get_system_status():
 #     return redirect(url_for('show_entries'))
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    app.run(host='0.0.0.0')
-=======
     peak_power = 0 * ureg.watts
-    app.run()
->>>>>>> 105263d4a2ef5539199a9039e77ec1fc731527e5
+    app.run(host='0.0.0.0')
