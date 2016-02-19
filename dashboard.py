@@ -7,6 +7,7 @@ from contextlib import closing
 from pint import UnitRegistry
 import requests
 import json
+import os
 
 # configuration
 DATABASE = '/tmp/OBMSdashboard.db'
@@ -15,8 +16,8 @@ SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
 
-# localhost test server
-HOME_CONTROLLER_URL = 'http://localhost:8123'
+HOME_CONTROLLER_URL = os.environ.get("HOME_CONTROLLER_URL", 'http://localhost:8123')
+
 # Home Hub Economy
 # HOME_CONTROLLER_URL = 'http://181.41.214.164:5051'
 # Home Hub Comfort
