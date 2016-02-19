@@ -24,8 +24,8 @@ $(document).ready(function(){
     event.preventDefault();
     var url = $(this).attr('action');
     var data = $(this).serialize();
-    var btn = $("input[type=submit][clicked=true]");
-    var prop = btn.parent().data('property')
+    var btn = $(this).find("input[type=submit][clicked=true]");
+    var prop = btn.parent().data('property');
     var val = btn.val()
     data += '&value='+val;
     data += '&property='+prop;
