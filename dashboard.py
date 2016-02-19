@@ -163,4 +163,4 @@ def get_system_status():
 
 if __name__ == '__main__':
     peak_power = 0 * ureg.watts
-    app.run()
+    app.run(host='0.0.0.0')
